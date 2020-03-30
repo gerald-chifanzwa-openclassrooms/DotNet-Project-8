@@ -16,8 +16,8 @@ namespace CalifornianHealthMonolithic.Models
 
     public class ConsultantModelList
     {
-        public List<ConsultantCalendarModel> consultantCalendars { get; set; }
-        public List<ConsultantModel> consultants { get; set; }
+        public List<ConsultantCalendar> consultantCalendars { get; set; }
+        public List<Consultant> consultants { get; set; }
         public int selectedConsultantId { get; set; }
         public SelectList ConsultantsList { get; set; }
     }

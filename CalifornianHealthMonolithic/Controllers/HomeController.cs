@@ -1,4 +1,5 @@
-﻿using CalifornianHealthMonolithic.Models;
+﻿using CalifornianHealthMonolithic.Code;
+using CalifornianHealthMonolithic.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,16 +14,12 @@ namespace CalifornianHealthMonolithic.Controllers
         public ActionResult Index()
         {
             ConsultantModelList conList = new ConsultantModelList();
-            List<ConsultantModel> consultantList = new List<ConsultantModel>();
-
-            consultantList.Add(new ConsultantModel { id = 1, fname = "Jessica", lname = "Wally", speciality = "Cardiologist" });
-            consultantList.Add(new ConsultantModel { id = 1, fname = "Iai", lname = "Donnas", speciality = "General Surgeon" });
-            consultantList.Add(new ConsultantModel { id = 1, fname = "Amanda", lname = "Denyl", speciality = "Doctor" });
-            consultantList.Add(new ConsultantModel { id = 1, fname = "Jason", lname = "Davis", speciality = "Cardiologist" });
-
-            conList.selectedConsultantId = 0;
-            conList.consultants = consultantList;
-
+            CHDBContext dbContext = new CHDBContext();
+            Repository repo = new Repository();
+            List<Consultant> cons = new List<Consultant>();
+            cons = repo.FetchConsultants(dbContext);
+            conList.ConsultantsList = new SelectList(cons, "Id", "FName");
+            conList.consultants = cons;
             return View(conList);
         }
 

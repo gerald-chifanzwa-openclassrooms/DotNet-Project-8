@@ -1,4 +1,5 @@
-﻿using CalifornianHealthMonolithic.Models;
+﻿using CalifornianHealthMonolithic.Code;
+using CalifornianHealthMonolithic.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,34 +16,25 @@ namespace CalifornianHealthMonolithic.Controllers
         public ActionResult GetConsultantCalendar()
         {
             ConsultantModelList conList = new ConsultantModelList();
-
-            //For purposes of this example, assume that the FETCHCONSULTANTCALENDARS is a database call
-            IEnumerable<ConsultantCalendarModel> cons = Repository.FetchConsultantCalendars();
-            conList.ConsultantsList = new SelectList(cons, "id", "consultantName");
-            conList.consultantCalendars = cons.ToList();
+            CHDBContext dbContext = new CHDBContext();
+            Repository repo = new Repository();
+            List<Consultant> cons = new List<Consultant>();
+            cons = repo.FetchConsultants(dbContext);
+            conList.ConsultantsList = new SelectList(cons, "Id", "FName");
+            conList.consultants = cons;
 
             return View(conList);
         }
 
         //TODO: Change this method to ensure that members do not have to wait endlessly. 
-        public ActionResult ConfirmAppointment()
+        public ActionResult ConfirmAppointment(Appointment model)
         {
-            BookingModel model = new BookingModel();
-
-            AppointmentDetails appointment = new AppointmentDetails();
-            appointment.appointmentDate = DateTime.Now.Date;
-            appointment.appointmentTime = DateTime.Now.ToLocalTime();
-            appointment.appointmentId = Guid.NewGuid();
-
-            model.appointment = appointment;
-            ConsultantDetails consultant = new ConsultantDetails();
-            consultant.consultantId = Convert.ToInt32(Request.Form["selectedConsultantId"]);
-            model.consultant = consultant;
+            CHDBContext dbContext = new CHDBContext();
 
             //Code to create appointment in database
-
             //This needs to be reassessed. Before confirming the appointment, should we check if the consultant calendar is still available?
-            var result = Repository.CreateAppointment(model);
+            Repository repo = new Repository();
+            var result = repo.CreateAppointment(model, dbContext);
 
             return View();
         }

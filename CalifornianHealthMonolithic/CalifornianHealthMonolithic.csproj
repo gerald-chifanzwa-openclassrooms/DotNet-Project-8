@@ -54,6 +54,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -125,21 +126,31 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Appointment.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Code\Repository.cs" />
+    <Compile Include="Consultant.cs" />
+    <Compile Include="ConsultantCalendar.cs" />
     <Compile Include="Controllers\BookingController.cs" />
     <Compile Include="Models\BookingModel.cs" />
     <Compile Include="Models\AvailableCalendarDates.cs" />
+    <Compile Include="Models\CHDBContext.cs" />
     <Compile Include="Models\ConsultantCalendarModel.cs" />
     <Compile Include="Models\ConsultantModel.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Patient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\CH.mdf" />
+    <Content Include="App_Data\CH_log.ldf">
+      <DependentUpon>CH.mdf</DependentUpon>
+    </Content>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -198,9 +209,7 @@
     <Content Include="Views\Booking\GetConsultantCalendar.cshtml" />
     <Content Include="Views\Booking\ConfirmAppointment.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
