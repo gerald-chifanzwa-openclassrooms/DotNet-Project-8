@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using CalendarApi;
 using CalendarApi.Requests;
 using MediatR;
@@ -10,7 +11,7 @@ using StackExchange.Redis;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DbConnection");
+var connectionString = builder.Configuration.GetConnectionString("CalendarConnection");
 builder.Services.AddDbContext<CalendarDbContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddMediatR(typeof(Program));
 builder.Services.AddSingleton<RedLockFactory>(sp =>
@@ -18,29 +19,40 @@ builder.Services.AddSingleton<RedLockFactory>(sp =>
     ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("localhost");
     return RedLockFactory.Create(new List<RedLockMultiplexer> { redis });
 });
-
+builder.Services.AddSingleton<IConcurrencyManager, ConcurrencyManager>();
+builder.Services.AddHttpClient("Consultants", httpClient =>
+{
+    httpClient.BaseAddress = new Uri(builder.Configuration.GetValue<string>("Services:Consultants"));
+    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+});
 
 var app = builder.Build();
-
+using (var scope = app.Services.CreateAsyncScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<CalendarDbContext>();
+    await dbContext.Database.EnsureCreatedAsync();
+}
 // Configure the HTTP request pipeline.
 
 app.UseHttpsRedirection();
 
 
-app.MapGet("/appointments", async ([FromQuery] ListAppointmentsRequest request, IMediator mediator) =>
-{
-    var appointments = await mediator.Send(request);
-    return appointments;
-});
+app.MapGet("/appointments", async (int? patientId,int? consultantId, DateTime? date, IMediator mediator) =>
+                                   await mediator.Send(new ListAppointmentsRequest()
+                                   {
+                                       PatientId = patientId,
+                                       AppointmentDate = date,
+                                       ConsultantId = consultantId                                   
+                                   })).RequireAuthorization();
 app.MapPost("/appointments", async ([FromBody] BookAppointmentRequest request, IMediator mediator) =>
 {
-    var appointment = await mediator.Send(request);
-    return Results.Created($"/appointments/{appointment.Id}", appointment);
-});
+    var result = await mediator.Send(request);
+    return result switch
+    {
+        BookingSuccessResult successResult => Results.Created($"/appointments/{successResult.Appointment.Id}", successResult.Appointment),
+        BookingErrorResult errorResult => Results.BadRequest(new ProblemDetails { Title = "Booking failed", Detail = errorResult.Reason }),
+        _ => Results.StatusCode(500)
+    };
+}).RequireAuthorization();
 
 app.Run();
-
-internal record WeatherForecast(DateTime Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

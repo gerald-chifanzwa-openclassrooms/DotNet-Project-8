@@ -16,10 +16,10 @@ public class AppointmentStatusEntityConfiguration : IEntityTypeConfiguration<App
 
         builder.HasData(new[]
         {
-            new AppointmentStatus{Status="Booked", IsCompleted=false, IsRescheduled=false},
-            new AppointmentStatus{Status="Completed", IsCompleted=true, IsRescheduled=false},
-            new AppointmentStatus{Status="Rescheduled", IsCompleted=false, IsRescheduled=true},
-            new AppointmentStatus{Status="Cancelled", IsCompleted=true, IsRescheduled=false},
+            new AppointmentStatus{Id=1, Status="Booked", IsCompleted=false, IsRescheduled=false},
+            new AppointmentStatus{Id=2, Status="Completed", IsCompleted=true, IsRescheduled=false},
+            new AppointmentStatus{Id=3, Status="Rescheduled", IsCompleted=false, IsRescheduled=true},
+            new AppointmentStatus{Id=4, Status="Cancelled", IsCompleted=true, IsRescheduled=false},
         });
     }
 }

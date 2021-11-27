@@ -27,7 +27,7 @@ public class BookAppointmentHandler : IRequestHandler<BookAppointmentRequest, Bo
         ConsultantViewModel? consultant = null;
         try
         {
-            consultant = await httpClient.GetFromJsonAsync<ConsultantViewModel>($"/consultant/{request.ConsultantId}");
+            consultant = await httpClient.GetFromJsonAsync<ConsultantViewModel>($"/consultants/{request.ConsultantId}");
         }
         catch (HttpRequestException httpException) when (httpException.StatusCode == HttpStatusCode.NotFound)
         {
@@ -36,7 +36,7 @@ public class BookAppointmentHandler : IRequestHandler<BookAppointmentRequest, Bo
 
         try
         {
-            return await _concurrencyManager.Execute<BookingResult>(() => ProcessBooking(consultant!, request));
+            return await _concurrencyManager.Execute("BOOK_APPOINTMENT", () => ProcessBooking(consultant!, request));
         }
         catch (ConcurrencyException)
         {
