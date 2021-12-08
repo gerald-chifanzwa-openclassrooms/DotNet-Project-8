@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Consultants.Api.Tests", "Co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Calendar", "Calendar", "{3A155263-DC8E-4281-82FE-6DCF1CA22442}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calendar.Api.Bomber", "Calendar.Api.Bomber\Calendar.Api.Bomber.csproj", "{9F5B6F43-EF91-41D8-B8D3-23F3E9F47808}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Calendar.Api.Bomber", "Calendar.Api.Bomber\Calendar.Api.Bomber.csproj", "{9F5B6F43-EF91-41D8-B8D3-23F3E9F47808}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarlifoniaHealthWeb", "CarlifoniaHealthWeb\CarlifoniaHealthWeb.csproj", "{618D52B6-CB3E-4510-839D-55C20D38F9C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{9F5B6F43-EF91-41D8-B8D3-23F3E9F47808}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F5B6F43-EF91-41D8-B8D3-23F3E9F47808}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F5B6F43-EF91-41D8-B8D3-23F3E9F47808}.Release|Any CPU.Build.0 = Release|Any CPU
+		{618D52B6-CB3E-4510-839D-55C20D38F9C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{618D52B6-CB3E-4510-839D-55C20D38F9C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{618D52B6-CB3E-4510-839D-55C20D38F9C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{618D52B6-CB3E-4510-839D-55C20D38F9C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
