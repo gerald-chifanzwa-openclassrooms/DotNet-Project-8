@@ -1,0 +1,35 @@
+version: '3.4'
+
+services:
+  carlifoniahealth-web:
+    image: ${DOCKER_REGISTRY-}carlifoniahealthweb
+    build:
+      context: .
+      dockerfile: CarlifoniaHealthWeb/Dockerfile
+
+  users-api:
+    image: ${DOCKER_REGISTRY-}usersapi
+    build:
+      context: .
+      dockerfile: Users.Api/Dockerfile
+
+
+  consultants-api:
+    image: ${DOCKER_REGISTRY-}consultantsapi
+    build:
+      context: .
+      dockerfile: Consultants.Api/Dockerfile
+
+
+  calendar-api:
+    image: ${DOCKER_REGISTRY-}calendarapi
+    build:
+      context: .
+      dockerfile: CalendarApi/Dockerfile
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+
+  redis:
+    image: redis:latest
+

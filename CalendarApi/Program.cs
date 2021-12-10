@@ -6,9 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RedLockNet.SERedis;
 using RedLockNet.SERedis.Configuration;
+using Serilog;
+using Serilog.Sinks.SystemConsole.Themes;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog((context, config) => config.WriteTo.Console(theme: AnsiConsoleTheme.Code));
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("CalendarConnection");
@@ -16,7 +19,7 @@ builder.Services.AddDbContext<CalendarDbContext>(options => options.UseSqlServer
 builder.Services.AddMediatR(typeof(Program));
 builder.Services.AddSingleton<RedLockFactory>(sp =>
 {
-    ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("localhost");
+    ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(builder.Configuration.GetValue<string>("RedisInstance"));
     return RedLockFactory.Create(new List<RedLockMultiplexer> { redis });
 });
 builder.Services.AddSingleton<IConcurrencyManager, ConcurrencyManager>();
@@ -37,12 +40,12 @@ using (var scope = app.Services.CreateAsyncScope())
 app.UseHttpsRedirection();
 
 
-app.MapGet("/appointments", async (int? patientId,int? consultantId, DateTime? date, IMediator mediator) =>
+app.MapGet("/appointments", async (int? patientId, int? consultantId, DateTime? date, IMediator mediator) =>
                                    await mediator.Send(new ListAppointmentsRequest()
                                    {
                                        PatientId = patientId,
                                        AppointmentDate = date,
-                                       ConsultantId = consultantId                                   
+                                       ConsultantId = consultantId
                                    })).RequireAuthorization();
 app.MapPost("/appointments", async ([FromBody] BookAppointmentRequest request, IMediator mediator) =>
 {

@@ -1,0 +1,61 @@
+version: '3.4'
+
+services:
+  carlifoniahealth-web:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Services__Consultants=http://consultants-api
+      - Services__Users=http://users-api
+      - Services__Calendar=http://calendar-api
+    ports:
+      - "80"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+
+  users-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ConnectionStrings__UsersConnection=Server=db; User Id=SA; Password=MyP@ssW0rD; Database=UsersDB;
+    ports:
+      - "80"
+      - "443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  consultants-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ConnectionStrings__DbConnection=Server=db; User Id=SA; Password=MyP@ssW0rD; Database=ConsultantsDB;
+    ports:
+      - "80"
+      - "443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  calendar-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ConnectionStrings__CalendarConnection=Server=db; User Id=SA; Password=MyP@ssW0rD; Database=CalendarDB;
+      - Services__Consultants=http://consultants-api
+      - RedisInstance=http://redis
+    ports:
+      - "80"
+      - "443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  db:
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=MyP@ssW0rD
+    ports:
+      - "1459:1433"
+
+  redis:
+    container_name: redis

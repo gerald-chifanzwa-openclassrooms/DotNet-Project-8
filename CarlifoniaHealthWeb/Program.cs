@@ -1,7 +1,10 @@
 using Microsoft.Extensions.Configuration;
+using Serilog;
+using Serilog.Sinks.SystemConsole.Themes;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Host.UseSerilog((context, config) => config.WriteTo.Console(theme: AnsiConsoleTheme.Code));
 // Add services to the container.
 builder.Services.AddRazorPages();
 
