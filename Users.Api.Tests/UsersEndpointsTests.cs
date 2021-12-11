@@ -39,7 +39,7 @@ public class UsersEndpointsTests : IClassFixture<ApplicationFactory>
     [Fact]
     public void GetUserByIdTests()
     {
-        int userId = 0;
+        var userId = 0;
 
         var client = _factory.WithWebHostBuilder(builder =>
         {
@@ -65,7 +65,7 @@ public class UsersEndpointsTests : IClassFixture<ApplicationFactory>
         var user = client.GetFromJsonAsync<UserViewModel>($"/users/{userId}").GetAwaiter().GetResult();
 
         user.Should().NotBeNull();
-        user.FullName.Should().Be("Test User");
-        user.Email.Should().Be("test@example.com");
+        user!.FullName.Should().Be("Test User");
+        user!.Email.Should().Be("test@example.com");
     }
 }

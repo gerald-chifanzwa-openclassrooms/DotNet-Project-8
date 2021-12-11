@@ -1,0 +1,27 @@
+﻿@page "{id:int}"
+@model ConsultantCalendarViewModel
+
+@{
+    ViewData["Title"] = "Book appointment";
+}
+<h4>Consultant Details</h4>
+
+<h5>@Model.SelectedConsultant?.FirstName @Model.SelectedConsultant?.LastName</h5>
+<form class="container">
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <label>Appointment Date</label>
+                <input type="date" class="form-control" name="appointmentDate" />
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="form-group">
+                <label>Consultant</label>
+                <select class="form-control" name="consultant">
+                </select>
+            </div>
+        </div>
+    </div>
+</form>

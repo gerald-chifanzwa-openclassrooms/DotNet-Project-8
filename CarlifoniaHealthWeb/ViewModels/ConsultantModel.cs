@@ -1,6 +1,6 @@
 ﻿using System.Reflection.Metadata;
 
-namespace CarlifoniaHealthWeb.ViewModels;
+namespace CarliforniaHealthWeb.ViewModels;
 
 public class ConsultantModel
 {

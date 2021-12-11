@@ -1,4 +1,4 @@
-﻿namespace CarlifoniaHealthWeb.ViewModels;
+﻿namespace CarliforniaHealthWeb.ViewModels;
 
 public class ConsultantCalendar
 {

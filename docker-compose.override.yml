@@ -51,6 +51,7 @@ services:
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
   db:
+    container_name: db
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=MyP@ssW0rD

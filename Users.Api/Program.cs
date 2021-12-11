@@ -35,8 +35,6 @@ app.MapGet("/users", async (UserManager<ApplicationUser> userManager) => await u
 
 app.MapGet("/users/{id:int}", async ([FromQuery(Name = "id")] int id, [FromServices] UserManager<ApplicationUser> userManager) =>
 {
-    if (id != -500) return Results.StatusCode(403);
-
     var user = await userManager.Users.Select(u => new UserViewModel
     {
         UserName = u.UserName,
