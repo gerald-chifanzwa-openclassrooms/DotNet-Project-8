@@ -8,7 +8,9 @@ builder.Host.UseSerilog((context, config) => config.WriteTo.Console(theme: AnsiC
 builder.Services.AddRazorPages();
 
 var consultantsServiceUrl = builder.Configuration.GetValue<string>("Services:Consultants");
+var calendarServiceUrl = builder.Configuration.GetValue<string>("Services:Calendar");
 builder.Services.AddHttpClient("ConsultantsService", options => options.BaseAddress = new Uri(consultantsServiceUrl!));
+builder.Services.AddHttpClient("CalendarService", options => options.BaseAddress = new Uri(calendarServiceUrl!));
 
 
 var app = builder.Build();

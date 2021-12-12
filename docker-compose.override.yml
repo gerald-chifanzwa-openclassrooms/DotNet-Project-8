@@ -42,7 +42,7 @@ services:
       - ASPNETCORE_URLS=https://+:443;http://+:80
       - ConnectionStrings__CalendarConnection=Server=db; User Id=SA; Password=MyP@ssW0rD; Database=CalendarDB;
       - Services__Consultants=http://consultants-api
-      - RedisInstance=http://redis
+      - RedisInstance=redis
     ports:
       - "80"
       - "443"

@@ -7,21 +7,67 @@
 <h4>Consultant Details</h4>
 
 <h5>@Model.SelectedConsultant?.FirstName @Model.SelectedConsultant?.LastName</h5>
-<form class="container">
+
+<form class="container" method="post" asp-page-handler="BookAppointment">
     <div class="row">
         <div class="col-6">
             <div class="form-group">
                 <label>Appointment Date</label>
-                <input type="date" class="form-control" name="appointmentDate" />
+                <input type="date" class="form-control" name="appointmentDate" required/>
+            </div>
+
+            <div class="list-group">
+                @foreach (var appointment in Model.ConsultantSchedule)
+                {
+                    <div class="list-group-item">
+                        @appointment.StartDate.ToString("d")
+                    </div>
+                }
             </div>
         </div>
 
         <div class="col-6">
-            <div class="form-group">
-                <label>Consultant</label>
-                <select class="form-control" name="consultant">
-                </select>
+            <div class="card">
+                <img src=@($"/img/doctor{Model.Id}.jpg") class="card-img" alt=""/>
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col">
+            <div class="d-flex">
+                <button type="submit" class="btn btn-primary">
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.Result != null)
+    {
+        <div class="row">
+            <div class="col">
+                <div class="w-100 border rounded border-success px-5 py-2">
+                    <h4 class="text-dark">Appointment has been booked successfully</h4>
+                    <dl>
+                        <dd>Date</dd>
+                        <dl>@Model.Result.StartDate.ToString("d")</dl>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    }
+    @if (Model.Error != null)
+    {
+        <div class="row">
+            <div class="col">
+                <div class="w-100 border rounded border-warning px-5 py-2">
+                    <h4 class="text-dark">Failed to book appointment</h4>
+                    <dl>
+                        <dd>Date</dd>
+                        <dl>@Model.Error</dl>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    }
 </form>

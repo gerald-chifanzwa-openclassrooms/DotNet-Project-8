@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Http.Headers;
 using CalendarApi;
 using CalendarApi.Requests;
@@ -19,8 +20,14 @@ builder.Services.AddDbContext<CalendarDbContext>(options => options.UseSqlServer
 builder.Services.AddMediatR(typeof(Program));
 builder.Services.AddSingleton<RedLockFactory>(sp =>
 {
-    ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(builder.Configuration.GetValue<string>("RedisInstance"));
-    return RedLockFactory.Create(new List<RedLockMultiplexer> { redis });
+
+    var endPoints = new List<RedLockEndPoint>
+    {
+        new DnsEndPoint(builder.Configuration.GetValue<string>("RedisInstance"), 6379),
+    };
+    return RedLockFactory.Create(endPoints);
+    // ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(builder.Configuration.GetValue<string>("RedisInstance"));
+    // return RedLockFactory.Create(new List<RedLockMultiplexer> { redis });
 });
 builder.Services.AddSingleton<IConcurrencyManager, ConcurrencyManager>();
 builder.Services.AddHttpClient("Consultants", httpClient =>
@@ -37,7 +44,7 @@ using (var scope = app.Services.CreateAsyncScope())
 }
 // Configure the HTTP request pipeline.
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 
 app.MapGet("/appointments", async (int? patientId, int? consultantId, DateTime? date, IMediator mediator) =>
@@ -46,7 +53,7 @@ app.MapGet("/appointments", async (int? patientId, int? consultantId, DateTime? 
                                        PatientId = patientId,
                                        AppointmentDate = date,
                                        ConsultantId = consultantId
-                                   })).RequireAuthorization();
+                                   }));
 app.MapPost("/appointments", async ([FromBody] BookAppointmentRequest request, IMediator mediator) =>
 {
     var result = await mediator.Send(request);
@@ -56,6 +63,6 @@ app.MapPost("/appointments", async ([FromBody] BookAppointmentRequest request, I
         BookingErrorResult errorResult => Results.BadRequest(new ProblemDetails { Title = "Booking failed", Detail = errorResult.Reason }),
         _ => Results.StatusCode(500)
     };
-}).RequireAuthorization();
+});
 
 app.Run();
