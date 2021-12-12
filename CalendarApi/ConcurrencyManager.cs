@@ -23,8 +23,5 @@ public class ConcurrencyManager : IConcurrencyManager
             return redLock.IsAcquired ? await action() : throw new ConcurrencyException("Failed to obtain lock");
         }
         // the lock is automatically released at the end of the using block
-
-
-
     }
 }

@@ -7,8 +7,10 @@ services:
       - Services__Consultants=http://consultants-api
       - Services__Users=http://users-api
       - Services__Calendar=http://calendar-api
+      - Auth0__Domain=ocproject8.us.auth0.com
+      - Auth0__ClientId=2xVSPJkzky0J5fQryfcV9QFNPwvV4Asm
     ports:
-      - "80"
+      - "5000:80"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
 

@@ -43,7 +43,7 @@ public class ConsultantCalendarViewModel : PageModel
         {
             AppointmentDate = appointmentDate,
             ConsultantId = Id,
-            PatientId = Request.HttpContext.TraceIdentifier.GetHashCode()
+            PatientId = User?.Identity?.Name?.GetHashCode() ?? 1// Request.HttpContext.TraceIdentifier.GetHashCode()
         });
         var responseContent = await response.Content.ReadAsStringAsync();
 

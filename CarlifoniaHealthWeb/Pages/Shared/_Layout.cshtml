@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CarlifoniaHealthWeb.styles.css" asp-append-version="true" />
 </head>
+@{
+    var isAuthenticated = User?.Identity?.IsAuthenticated ?? false;
+    var userName = User?.Identity?.Name;
+}
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -22,9 +26,25 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Consultants">Consultants</a>
-                        </li>
+                    </ul>
+                    <ul>
+                        @if (!isAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link tex-dark border" asp-page="/Account" asp-area="" asp-page-handler="Login">Login</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link tex-dark">
+                                    @userName
+                                </a>
+                            </li>
+                             <li class="nav-item">
+                                <a class="nav-link tex-dark border" asp-page="/Account" asp-area="" asp-page-handler="Logout">Logout</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace Users.Api.Tests;
@@ -32,7 +34,7 @@ public class UsersEndpointsTests : IClassFixture<ApplicationFactory>
 
         var response = client.GetAsync("/users/100").GetAwaiter().GetResult();
 
-        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
 
 
@@ -62,8 +64,13 @@ public class UsersEndpointsTests : IClassFixture<ApplicationFactory>
             });
         }).CreateClient();
 
-        var user = client.GetFromJsonAsync<UserViewModel>($"/users/{userId}").GetAwaiter().GetResult();
+        var url = $"/users/{userId}";
 
+        var result = client.GetAsync(url).GetAwaiter().GetResult();
+
+        result.StatusCode.Should().Be(HttpStatusCode.OK);
+        var responseContent = result.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+        var user = JsonConvert.DeserializeObject<UserViewModel>(responseContent);
         user.Should().NotBeNull();
         user!.FullName.Should().Be("Test User");
         user!.Email.Should().Be("test@example.com");

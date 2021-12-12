@@ -33,7 +33,7 @@ app.MapGet("/users", async (UserManager<ApplicationUser> userManager) => await u
     Type = (int)u.Type,
 }).ToListAsync());
 
-app.MapGet("/users/{id:int}", async ([FromQuery(Name = "id")] int id, [FromServices] UserManager<ApplicationUser> userManager) =>
+app.MapGet("/users/{id:int}", async ([FromRoute(Name = "id")] int id, [FromServices] UserManager<ApplicationUser> userManager) =>
 {
     var user = await userManager.Users.Select(u => new UserViewModel
     {
